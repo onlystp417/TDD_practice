@@ -1,0 +1,16 @@
+# 依賴套件
+node_modules/
+
+# 編譯產物
+dist/
+out/
+
+# 測試結果
+coverage/
+
+# 作業系統產生的雜物
+.DS_Store
+Thumbs.db
+
+# VS Code 自己的設定 (如果你不想分享的話)
+.vscode/
