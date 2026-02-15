@@ -1,4 +1,4 @@
-import { ProbabilitySystem } from "./ProbabilitySystem"
+import { ProbabilitySystem } from "../app/ProbabilitySystem"
 
 describe('probability system', () => {
 	test('lose', () => {
