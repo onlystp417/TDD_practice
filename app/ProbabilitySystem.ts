@@ -1,19 +1,20 @@
 export class ProbabilitySystem {
-  // 讓第一條預設就連線
-  oldReels : Array<Array<String>> = [
-    ['A', 'Q', 'K'],
-    ['A', 'Q', 'K'],
-    ['A', 'Q', 'K'],
-    ['A', 'Q', 'K'],
-    ['A', '10', 'J'],
-  ]
-  
-  reels: Reels = new Reels(this.oldReels)
+  private reels: Reels
+
+  constructor(reels: Reels) {
+    this.reels = reels
+  }
 
   spin(betLine: string): number {
-    return this.reels.isRow1Hit() && betLine === 'L1'
-      ? 20
-      : 0
+    if (this.reels.isRow1Hit() && betLine === 'L1') {
+      return 20
+    }
+
+    if (this.reels.isRow2Hit() && betLine === 'L2') {
+      return 20
+    }
+
+    return 0
   }
 }
 
@@ -24,13 +25,23 @@ export class Reels {
     this.reels = reels
   }
 
-  public isRow1Hit(): boolean {
-    // 判斷第一條是否連線（不轉，預設本來就連線）
+  isRow1Hit(): boolean {
+    // 判斷第一條是否連線
     const firstLineSet = new Set<String>()
     for (let i = 0; i < this.reels.length; i++) {
       const reel = this.reels[i]
       firstLineSet.add(reel[0])
     }
     return firstLineSet.size === 1
+  }
+
+  isRow2Hit(): boolean {
+    // 判斷第二條是否連線
+    const secondLineSet = new Set<String>()
+    for (let i = 0; i < this.reels.length; i++) {
+      const reel = this.reels[i]
+      secondLineSet.add(reel[1])
+    }
+    return secondLineSet.size === 1
   }
 }
