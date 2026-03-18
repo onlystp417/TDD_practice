@@ -17,7 +17,7 @@ export class ProbabilitySystem {
   }
 }
 
-class Reels {
+export class Reels {
   private reels: Array<Array<String>>
 
   constructor(reels: Array<Array<String>>) {
