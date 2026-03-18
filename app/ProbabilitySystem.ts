@@ -6,11 +6,11 @@ export class ProbabilitySystem {
   }
 
   spin(betLine: string): number {
-    if (this.reels.isRow1Hit() && betLine === 'L1') {
+    if (this.reels.isRowHit(0) && betLine === 'L1') {
       return 20
     }
 
-    if (this.reels.isRow2Hit() && betLine === 'L2') {
+    if (this.reels.isRowHit(1) && betLine === 'L2') {
       return 20
     }
 
@@ -25,23 +25,12 @@ export class Reels {
     this.reels = reels
   }
 
-  isRow1Hit(): boolean {
-    // 判斷第一條是否連線
-    const firstLineSet = new Set<String>()
+  isRowHit(row: number): boolean {
+    const lineSet = new Set<String>()
     for (let i = 0; i < this.reels.length; i++) {
       const reel = this.reels[i]
-      firstLineSet.add(reel[0])
+      lineSet.add(reel[row])
     }
-    return firstLineSet.size === 1
-  }
-
-  isRow2Hit(): boolean {
-    // 判斷第二條是否連線
-    const secondLineSet = new Set<String>()
-    for (let i = 0; i < this.reels.length; i++) {
-      const reel = this.reels[i]
-      secondLineSet.add(reel[1])
-    }
-    return secondLineSet.size === 1
+    return lineSet.size === 1
   }
 }
