@@ -1,6 +1,10 @@
 export class ProbabilitySystem {
   private reels: Reels
 
+  static create(reels: Reels): ProbabilitySystem {
+    return new ProbabilitySystem(reels);
+  }
+
   constructor(reels: Reels) {
     this.reels = reels
   }
@@ -20,6 +24,11 @@ export class ProbabilitySystem {
 
 export class Reels {
   private reels: Array<Array<String>>
+
+  static create(data: Array<Array<string>>): Reels {
+    // 這裡可以加入驗證邏輯，例如檢查陣列長度是否正確
+    return new Reels(data);
+  }
 
   constructor(reels: Array<Array<String>>) {
     this.reels = reels
