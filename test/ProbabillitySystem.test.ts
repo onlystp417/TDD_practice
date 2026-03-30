@@ -56,5 +56,24 @@ describe('probability system', () => {
 		// assertion
 		expect(result).toBe(0)
 	})
+
+	test('Roll then Row3 hit, bet L3 -> 20', () => {
+		// 逼出觀景窗 Screen：不只有三行的 reels、轉動範圍（從哪裡算第一行）
+		const reels = [
+			['9', 'A', 'Q', 'K'],
+			['9', 'A', 'Q', 'K'],
+			['9', 'A', 'Q', 'K'],
+			['9', 'A', 'Q', 'K'],
+			['10', '10', 'J', 'K'],
+		]
+		const line1Index = 1
+		const betLine = 'L3'
+		const sut = ProbabilitySystem.create(Reels.create(line1Index, reels))
+
+		const result = sut.spin(betLine)
+
+		expect(result).toBe(20)
+
+	})
 })
 

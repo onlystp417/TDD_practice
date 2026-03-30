@@ -28,14 +28,22 @@ export class ProbabilitySystem {
 
 export class Reels {
   private reels: Array<Array<String>>
+  private index: number      // 原本的 index
+  private nextIndex: number  // 轉動範圍
 
-  static create(data: Array<Array<string>>): Reels {
-    // 這裡可以加入驗證邏輯，例如檢查陣列長度是否正確
-    return new Reels(data);
+  constructor(reels: Array<Array<String>>, nextIndex: number) {
+    this.reels = reels
+    this.index = 0
+    this.nextIndex = nextIndex
+  }
+  
+  static create(nextIndex: number, rowReels: Array<Array<string>>): Reels {
+    // 給予轉動後的 index
+    return new Reels(rowReels, nextIndex);
   }
 
-  constructor(reels: Array<Array<String>>) {
-    this.reels = reels
+  spin() {
+    this.index = this.nextIndex
   }
 
   isRowHit(row: number): boolean {
