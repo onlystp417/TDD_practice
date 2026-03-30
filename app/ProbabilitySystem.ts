@@ -47,10 +47,12 @@ export class Reels {
   }
 
   isRowHit(row: number): boolean {
+    // 算出賭注的 Line index
+    const localRow: number = row + this.nextIndex
     const lineSet = new Set<String>()
     for (let i = 0; i < this.reels.length; i++) {
       const reel = this.reels[i]
-      lineSet.add(reel[row])
+      lineSet.add(reel[localRow])
     }
     return lineSet.size === 1
   }
