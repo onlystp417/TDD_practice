@@ -47,25 +47,33 @@ export class Reels {
   }
 
   isRowHit(row: number): boolean {
-    const screen: Array<Array<string>> = this.getScreen()
-    return this.isScreenRowHit(screen, row)
+    const screen: Screen = this.getScreen()
+    return screen.isScreenRowHit(row)
   }
 
   private getScreen() {
     // 定義出觀景窗範圍 Screen
-    const screen: Array<Array<string>> = []
+    const rawScreen: Array<Array<string>> = []
     // spin
     for (let i: number = 0; i < this.reels.length; i++) {
-      screen.push(this.reels[i].slice(this.index, this.index + 3))
+      rawScreen.push(this.reels[i].slice(this.index, this.index + 3))
     }
-    return screen
+    return new Screen(rawScreen)
+  }
+}
+
+class Screen {
+  private readonly rawScreen: Array<Array<string>>
+
+  constructor(rawScreen: Array<Array<string>>) {
+    this.rawScreen = rawScreen
   }
 
-  private isScreenRowHit(screen: Array<Array<string>>, row: number) {
+  isScreenRowHit(row: number) {
     // 看押注的 Line 有沒有中
     const lineSet = new Set<string>()
-    for (let i = 0; i < screen.length; i++) {
-      const screenReel: string[] = screen[i]
+    for (let i = 0; i < this.rawScreen.length; i++) {
+      const screenReel: string[] = this.rawScreen[i]
       lineSet.add(screenReel[row])
     }
     return lineSet.size === 1
