@@ -57,7 +57,7 @@ describe('probability system', () => {
 		expect(result).toBe(0)
 	})
 
-	test.only('Roll then Row3 hit, bet L3 -> 20', () => {
+	test('Roll then Row3 hit, bet L3 -> 20', () => {
 		// 逼出觀景窗 Screen：不只有三行的 reels、轉動範圍（從哪裡算第一行）
 		const reels = [
 			['9', 'A', 'Q', 'K'],
@@ -75,6 +75,23 @@ describe('probability system', () => {
 
 		expect(result).toBe(20)
 
+	})
+
+	test.only('Each Reels spins independently', () => {
+		const reels = [
+			['A', 'Q', 'K'],
+			['9', 'A', 'Q', 'K'],
+			['8', '9', 'A', 'Q', 'K'],
+			['7', '8', '9', 'A', 'Q', 'K'],
+			['6', '7', '8', '9', 'A', 'Q', 'K'],
+		]
+		const randomGeberator = new RandomNumberGenerator(0, 1, 2, 3, 4)
+		const line1Index = randomGeberator.nextInteger()
+		const sut = ProbabilitySystem.create(Reels.create(line1Index, reels))
+
+		const result = sut.spin('L1')
+
+		expect(result).toBe(20)
 	})
 })
 

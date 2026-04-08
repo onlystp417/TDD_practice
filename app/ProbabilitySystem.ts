@@ -91,13 +91,13 @@ class Screen {
 }
 
 export class RandomNumberGenerator {
-  private _nextInteger: number
+  private integers: number[]
 
-  constructor(nextInteger: number) {
-    this._nextInteger = nextInteger
+  constructor(...numbers: number[]) {
+    this.integers = numbers
   }
 
   nextInteger(): number {
-    return this._nextInteger
+    return <number>this.integers.shift()
   }
 }
