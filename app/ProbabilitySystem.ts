@@ -47,13 +47,21 @@ export class Reels {
   }
 
   isRowHit(row: number): boolean {
+    const screen: Array<Array<string>> = this.getScreen()
+    return this.isScreenRowHit(screen, row)
+  }
+
+  private getScreen() {
     // 定義出觀景窗範圍 Screen
     const screen: Array<Array<string>> = []
     // spin
     for (let i: number = 0; i < this.reels.length; i++) {
       screen.push(this.reels[i].slice(this.index, this.index + 3))
     }
+    return screen
+  }
 
+  private isScreenRowHit(screen: Array<Array<string>>, row: number) {
     // 看押注的 Line 有沒有中
     const lineSet = new Set<string>()
     for (let i = 0; i < screen.length; i++) {
