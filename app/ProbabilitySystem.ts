@@ -10,6 +10,8 @@ export class ProbabilitySystem {
   }
 
   spin(betLine: string): number {
+    this.reels.spin()
+
     if (this.reels.isRowHit(0) && betLine === 'L1') {
       return 20
     }
@@ -85,5 +87,17 @@ class Screen {
       lineSet.add(screenReel[row])
     }
     return lineSet.size === 1
+  }
+}
+
+export class RandomNumberGenerator {
+  private _nextInteger: number
+
+  constructor(nextInteger: number) {
+    this._nextInteger = nextInteger
+  }
+
+  nextInteger(): number {
+    return this._nextInteger
   }
 }

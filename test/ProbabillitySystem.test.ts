@@ -1,11 +1,11 @@
-import { ProbabilitySystem, Reels } from "../app/ProbabilitySystem"
+import { ProbabilitySystem, Reels, RandomNumberGenerator } from "../app/ProbabilitySystem"
 
 describe('probability system', () => {
 	// 將 Reels 改為依賴注入，解耦
 	// 每個 case 都有自己的 Reels 初始值
 
 	test('Row1 hit, bet L1 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create([
+		const sut = ProbabilitySystem.create(Reels.create(0, [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -16,7 +16,7 @@ describe('probability system', () => {
 	})
 
 	test('Row2 hit, bet L2 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create([
+		const sut = ProbabilitySystem.create(Reels.create(0, [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -27,7 +27,7 @@ describe('probability system', () => {
 	})
 
 	test('Row3 hit, bet L3 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create([
+		const sut = ProbabilitySystem.create(Reels.create(0, [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -48,7 +48,7 @@ describe('probability system', () => {
 			['A', '10', 'J'],
 		]
 		const betLineIsNotLine1 = 'L2'
-		const sut = ProbabilitySystem.create(Reels.create(row1Hit))
+		const sut = ProbabilitySystem.create(Reels.create(0, row1Hit))
 
 		// action, basicly 1 line
 		const result = sut.spin(betLineIsNotLine1)
@@ -57,7 +57,7 @@ describe('probability system', () => {
 		expect(result).toBe(0)
 	})
 
-	test('Roll then Row3 hit, bet L3 -> 20', () => {
+	test.only('Roll then Row3 hit, bet L3 -> 20', () => {
 		// 逼出觀景窗 Screen：不只有三行的 reels、轉動範圍（從哪裡算第一行）
 		const reels = [
 			['9', 'A', 'Q', 'K'],
@@ -66,7 +66,8 @@ describe('probability system', () => {
 			['9', 'A', 'Q', 'K'],
 			['10', '10', 'J', 'K'],
 		]
-		const line1Index = 1
+		const randomGeberator = new RandomNumberGenerator(1)
+		const line1Index = randomGeberator.nextInteger()
 		const betLine = 'L3'
 		const sut = ProbabilitySystem.create(Reels.create(line1Index, reels))
 
