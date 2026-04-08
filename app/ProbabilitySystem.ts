@@ -27,12 +27,12 @@ export class ProbabilitySystem {
 }
 
 export class Reels {
-  private reels: Array<Array<string>>
+  private reels: Array<Reel>
   private index: number      // 原本的 index
   private nextIndex: number  // 轉動範圍
 
-  constructor(reels: Array<Array<string>>, nextIndex: number) {
-    this.reels = reels
+  private constructor(reels: Array<Array<string>>, nextIndex: number) {
+    this.reels = reels.map((reel: Array<string>) => new Reel(reel))
     this.index = 0
     this.nextIndex = nextIndex
   }
@@ -51,14 +51,22 @@ export class Reels {
     return screen.isScreenRowHit(row)
   }
 
-  private getScreen() {
-    // 定義出觀景窗範圍 Screen
-    const rawScreen: Array<Array<string>> = []
-    // spin
-    for (let i: number = 0; i < this.reels.length; i++) {
-      rawScreen.push(this.reels[i].slice(this.index, this.index + 3))
-    }
-    return new Screen(rawScreen)
+  private getScreen(): Screen {
+    return new Screen(
+      this.reels.map((reel: Reel): Array<string> => reel.getScreenColumn(this.index))
+    )
+  }
+}
+
+class Reel {
+  private symbols: Array<string>
+
+  constructor(symbols: Array<string>) {
+    this.symbols = symbols
+  }
+
+  getScreenColumn(index: number): string[] {
+    return this.symbols.slice(index, index + 3)
   }
 }
 
