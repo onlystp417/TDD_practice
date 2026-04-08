@@ -27,11 +27,11 @@ export class ProbabilitySystem {
 }
 
 export class Reels {
-  private reels: Array<Array<String>>
+  private reels: Array<Array<string>>
   private index: number      // 原本的 index
   private nextIndex: number  // 轉動範圍
 
-  constructor(reels: Array<Array<String>>, nextIndex: number) {
+  constructor(reels: Array<Array<string>>, nextIndex: number) {
     this.reels = reels
     this.index = 0
     this.nextIndex = nextIndex
@@ -47,12 +47,18 @@ export class Reels {
   }
 
   isRowHit(row: number): boolean {
-    // 算出賭注的 Line index
-    const localRow: number = row + this.nextIndex
-    const lineSet = new Set<String>()
-    for (let i = 0; i < this.reels.length; i++) {
-      const reel = this.reels[i]
-      lineSet.add(reel[localRow])
+    // 定義出觀景窗範圍 Screen
+    const screen: Array<Array<string>> = []
+    // spin
+    for (let i: number = 0; i < this.reels.length; i++) {
+      screen.push(this.reels[i].slice(this.index, this.index + 3))
+    }
+
+    // 看押注的 Line 有沒有中
+    const lineSet = new Set<string>()
+    for (let i = 0; i < screen.length; i++) {
+      const screenReel: string[] = screen[i]
+      lineSet.add(screenReel[row])
     }
     return lineSet.size === 1
   }
