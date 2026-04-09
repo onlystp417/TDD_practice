@@ -30,13 +30,11 @@ export class ProbabilitySystem {
 
 export class Reels {
   private reels: Array<Reel>
-  private indices: number[] // 起始 index
-  private randomNumberGenerator: RandomNumberGenerator  // 每個 reel 要轉動的範圍
 
   private constructor(randomNumberGenerator: RandomNumberGenerator, reels: Array<Array<string>>) {
-    this.reels = reels.map((reel: Array<string>) => Reel.from(reel))
-    this.randomNumberGenerator = randomNumberGenerator
-    this.indices = [0, 0, 0, 0, 0]
+    // 不需要再管理 indices 跟 randomNumberGenerator
+    // 每個 Reel 都會自己處理了
+    this.reels = reels.map((reel: Array<string>) => Reel.from(reel, randomNumberGenerator))
   }
   
   static create(randomNumberGenerator: RandomNumberGenerator, rowReels: Array<Array<string>>): Reels {
@@ -45,7 +43,8 @@ export class Reels {
 
   spin(): void {
     for(let i: number = 0; i < this.reels.length; i++) {
-      this.indices[i] = this.randomNumberGenerator.nextInteger()
+      // 讓每個 reel 自己轉動
+      this.reels[i].spin()
     }
   }
 
@@ -57,7 +56,8 @@ export class Reels {
   private getScreen(): Screen {
     const rawScreen: Array<Array<string>> = []
     for(let i: number = 0; i < this.reels.length; i++) {
-      rawScreen.push(this.reels[i].getScreenColumn(this.indices[i]))
+      // 每個 reel 會自己回傳轉動後的 column
+      rawScreen.push(this.reels[i].getScreenColumn())
     }
     return new Screen(rawScreen)
   }
@@ -65,17 +65,25 @@ export class Reels {
 
 class Reel {
   private symbols: Array<string>
+  private randomNumberGenerator: RandomNumberGenerator
+  private index: number
 
-  constructor(symbols: Array<string>) {
+  constructor(symbols: Array<string>, randomNumberGenerator: RandomNumberGenerator) {
     this.symbols = symbols
+    this.randomNumberGenerator = randomNumberGenerator
+    this.index = 0
   }
 
-  static from(symbols: Array<string>) {
-    return new Reel(symbols)
+  static from(symbols: Array<string>, randomNumberGenerator: RandomNumberGenerator) {
+    return new Reel(symbols, randomNumberGenerator)
   }
 
-  getScreenColumn(index: number): string[] {
-    return this.symbols.slice(index, index + 3)
+  getScreenColumn(): string[] {
+    return this.symbols.slice(this.index, this.index + 3)
+  }
+
+  spin() {
+    this.index = this.randomNumberGenerator.nextInteger()
   }
 }
 
