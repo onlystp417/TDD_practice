@@ -5,7 +5,7 @@ describe('probability system', () => {
 	// 每個 case 都有自己的 Reels 初始值
 
 	test('Row1 hit, bet L1 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create(0, [
+		const sut = ProbabilitySystem.create(Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4), [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -16,7 +16,7 @@ describe('probability system', () => {
 	})
 
 	test('Row2 hit, bet L2 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create(0, [
+		const sut = ProbabilitySystem.create(Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4), [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -27,7 +27,7 @@ describe('probability system', () => {
 	})
 
 	test('Row3 hit, bet L3 -> 20', () => {
-		const sut = ProbabilitySystem.create(Reels.create(0, [
+		const sut = ProbabilitySystem.create(Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4), [
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
 			['A', 'Q', 'K'],
@@ -48,7 +48,7 @@ describe('probability system', () => {
 			['A', '10', 'J'],
 		]
 		const betLineIsNotLine1 = 'L2'
-		const sut = ProbabilitySystem.create(Reels.create(0, row1Hit))
+		const sut = ProbabilitySystem.create(Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4), row1Hit))
 
 		// action, basicly 1 line
 		const result = sut.spin(betLineIsNotLine1)
@@ -66,10 +66,8 @@ describe('probability system', () => {
 			['9', 'A', 'Q', 'K'],
 			['10', '10', 'J', 'K'],
 		]
-		const randomGeberator = new RandomNumberGenerator(1)
-		const line1Index = randomGeberator.nextInteger()
 		const betLine = 'L3'
-		const sut = ProbabilitySystem.create(Reels.create(line1Index, reels))
+		const sut = ProbabilitySystem.create(Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4), reels))
 
 		const result = sut.spin(betLine)
 
@@ -85,9 +83,10 @@ describe('probability system', () => {
 			['7', '8', '9', 'A', 'Q', 'K'],
 			['6', '7', '8', '9', 'A', 'Q', 'K'],
 		]
-		const randomGeberator = new RandomNumberGenerator(0, 1, 2, 3, 4)
-		const line1Index = randomGeberator.nextInteger()
-		const sut = ProbabilitySystem.create(Reels.create(line1Index, reels))
+		const sut = ProbabilitySystem.create(
+			Reels.create(new RandomNumberGenerator(0, 1, 2, 3, 4),
+			reels
+		))
 
 		const result = sut.spin('L1')
 

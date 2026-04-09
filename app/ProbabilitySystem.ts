@@ -30,22 +30,23 @@ export class ProbabilitySystem {
 
 export class Reels {
   private reels: Array<Reel>
-  private index: number      // 原本的 index
-  private nextIndex: number  // 轉動範圍
+  private indices: number[] // 起始 index
+  private randomNumberGenerator: RandomNumberGenerator  // 每個 reel 要轉動的範圍
 
-  private constructor(reels: Array<Array<string>>, nextIndex: number) {
-    this.reels = reels.map((reel: Array<string>) => new Reel(reel))
-    this.index = 0
-    this.nextIndex = nextIndex
+  private constructor(randomNumberGenerator: RandomNumberGenerator, reels: Array<Array<string>>) {
+    this.reels = reels.map((reel: Array<string>) => Reel.from(reel))
+    this.randomNumberGenerator = randomNumberGenerator
+    this.indices = [0, 0, 0, 0, 0]
   }
   
-  static create(nextIndex: number, rowReels: Array<Array<string>>): Reels {
-    // 給予轉動後的 index
-    return new Reels(rowReels, nextIndex);
+  static create(randomNumberGenerator: RandomNumberGenerator, rowReels: Array<Array<string>>): Reels {
+    return new Reels(randomNumberGenerator, rowReels);
   }
 
-  spin() {
-    this.index = this.nextIndex
+  spin(): void {
+    for(let i: number = 0; i < this.reels.length; i++) {
+      this.indices[i] = this.randomNumberGenerator.nextInteger()
+    }
   }
 
   isRowHit(row: number): boolean {
@@ -54,9 +55,11 @@ export class Reels {
   }
 
   private getScreen(): Screen {
-    return new Screen(
-      this.reels.map((reel: Reel): Array<string> => reel.getScreenColumn(this.index))
-    )
+    const rawScreen: Array<Array<string>> = []
+    for(let i: number = 0; i < this.reels.length; i++) {
+      rawScreen.push(this.reels[i].getScreenColumn(this.indices[i]))
+    }
+    return new Screen(rawScreen)
   }
 }
 
@@ -65,6 +68,10 @@ class Reel {
 
   constructor(symbols: Array<string>) {
     this.symbols = symbols
+  }
+
+  static from(symbols: Array<string>) {
+    return new Reel(symbols)
   }
 
   getScreenColumn(index: number): string[] {
@@ -77,6 +84,10 @@ class Screen {
 
   constructor(rawScreen: Array<Array<string>>) {
     this.rawScreen = rawScreen
+  }
+
+  static from(rawScreen: Array<Array<string>>) {
+    return new Screen(rawScreen)
   }
 
   isScreenRowHit(row: number) {
